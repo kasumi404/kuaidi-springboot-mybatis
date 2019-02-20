@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjf.mapper.ComplaintMapper">
+    <select id="getComplaint" resultType="complaint" parameterType="complaint">
+    select * from complaint where 1=1
+        <if test="complaintId != null and complaintId !=''">
+            and complaintId = #{complaintId}
+        </if>
+        <if test="adminId != null and adminId !=''">
+            and adminId = #{adminId}
+        </if>
+        <if test="pageIndex != null">
+            limit ${(pageIndex-1)*pageSize},${pageSize}
+        </if>
+
+
+    </select>
+    <insert id="insertComplaint" parameterType="complaint" keyProperty="complaintId" useGeneratedKeys="true">
+        insert into complaint
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminId != null">
+                adminId,
+            </if>
+            <if test="context != null">
+                context,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="complaintId != null">
+                #{complaintId},
+            </if>
+            <if test="adminId != null">
+                #{adminId},
+            </if>
+            <if test="context != null">
+                #{context},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateComplaint" parameterType="complaint">
+        update complaint
+        <trim prefix="set" suffixOverrides=",">
+            <if test="context != null">
+                context=#{context},
+            </if>
+        </trim>
+        where complaintId=#{complaintId}
+    </update>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjf.mapper.CourierMapper">
+    <select id="getCourier" resultType="courier" parameterType="courier">
+    select * from courier where 1=1
+        <if test="courierId != null and courierId != ''">and courierId=#{courierId}</if>
+        <if test="courierName != null and courierName != ''">and courierName=#{courierName}</if>
+        <if test="courierCall != null and courierCall != ''">and courierCall=#{courierCall}</if>
+        <if test="courierIdCard != null and courierIdCard != ''">and courierIdCard=#{courierIdCard}</if>
+  </select>
+    <insert id="insertCourier" parameterType="courier" keyProperty="id" useGeneratedKeys="true"
+    >
+    insert into courier(courierName, courierCall,courierIdCard)
+     values(#{courierName}, #{courierCall}, #{courierIdCard})
+  </insert>
+
+    <update id="updateCourier" parameterType="courier">
+        update courier
+        <set>
+            <if test="courierName != null">courierName=#{courierName},</if>
+            <if test="courierCall != null">courierCall=#{courierCall},</if>
+            <if test="courierIdCard != null">courierIdCard=#{courierIdCard}</if>
+        </set>
+
+        <if test="courierId != null and courierId !=''">
+            where courierId=#{courierId}
+        </if>
+
+    </update>
+    <delete id="deleteCourier" parameterType="int">
+    delete from courier where courierId = #{courierId}
+  </delete>
+</mapper>

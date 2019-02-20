@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjf.mapper.AdminInfoMapper">
+    <select id="getAdminInfo" resultType="admin_info" parameterType="admin_info">
+    select * from admin_info where 1=1
+        <if test="adminId != null">
+            and adminId = #{adminId}
+        </if>
+        <if test="adminName != null">
+            and adminName=#{adminName}
+        </if>
+        <if test="adminCell != null">
+            and adminCell=#{adminCell}
+        </if>
+        <if test="pageIndex != null">
+          limit #{pageIndex} , #{pageSize}
+        </if>
+  </select>
+    <insert id="insertAdminInfo" parameterType="admin_info" keyProperty="adminId" useGeneratedKeys="true">
+        insert into admin_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminId != null">
+                adminId,
+            </if>
+            <if test="adminName != null">
+                adminName,
+            </if>
+            <if test="adminCell != null">
+                adminCell,
+            </if>
+            <if test="adminIDCard != null">
+                adminIDCard,
+            </if>
+            <if test="adminPlace != null">
+                adminPlace,
+            </if>
+            <if test="adminRoot != null">
+                adminRoot,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="adminId != null">
+                #{adminId},
+            </if>
+            <if test="adminName != null">
+                #{adminName},
+            </if>
+            <if test="adminCell != null">
+                #{adminCell},
+            </if>
+            <if test="adminIDCard != null">
+                #{adminIDCard},
+            </if>
+            <if test="adminPlace != null">
+                #{adminPlace},
+            </if>
+            <if test="adminRoot != null">
+                #{adminRoot},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateAdminInfo" parameterType="admin_info">
+        update admin_info
+        <set>
+            <if test="adminName != null">adminName=#{adminName},</if>
+            <if test="adminCell != null">adminCell=#{adminCell},</if>
+            <if test="adminIDCard != null">adminIDCard=#{adminIDCard},</if>
+            <if test="adminPlace != null">adminPlace=#{adminPlace},</if>
+            <if test="adminRoot != null">adminRoot=#{adminRoot}</if>
+        </set>
+        where adminId=#{adminId}
+    </update>
+</mapper>

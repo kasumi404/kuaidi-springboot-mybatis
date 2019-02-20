@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjf.mapper.ManageMapper">
+    <select id="getManage" resultType="manage" parameterType="manage">
+    select * from manage where 1=1
+        <if test="username != null and username != ''">and username=#{username}</if>
+        <if test="password != null and password != ''">and password=#{password}</if>
+        <if test="root != null and root != ''">and root=#{root}</if>
+        <if test="id != null and id != ''">and id=#{id}</if>
+  </select>
+    <insert id="insertManage" parameterType="manage" keyProperty="id" useGeneratedKeys="true"
+    >
+    insert into manage(username, password,root)
+     values(#{username}, #{password}, #{root})
+  </insert>
+
+    <update id="updateManage" parameterType="manage">
+        update manage
+        <set>
+            <if test="username != null">username=#{username},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="root != null">root=#{root}</if>
+        </set>
+
+        <if test="id != null and id !=''">
+            where id=#{id}
+        </if>
+
+    </update>
+    <delete id="deleteManage" parameterType="int">
+    delete from manage where id = #{id}
+  </delete>
+</mapper>
