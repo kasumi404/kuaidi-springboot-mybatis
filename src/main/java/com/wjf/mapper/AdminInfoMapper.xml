@@ -75,4 +75,7 @@
         </set>
         where adminId=#{adminId}
     </update>
+    <delete id="deleteAdminInfo" parameterType="int">
+    delete from admin_info where adminId = #{adminId}
+  </delete>
 </mapper>

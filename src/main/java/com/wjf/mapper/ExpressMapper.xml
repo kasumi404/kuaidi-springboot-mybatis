@@ -53,4 +53,7 @@
         </trim>
         where expressId=#{expressId}
     </update>
+    <delete id="deleteExpress" parameterType="int">
+    delete from express where expressId = #{expressId}
+  </delete>
 </mapper>

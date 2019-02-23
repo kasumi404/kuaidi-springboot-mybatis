@@ -63,4 +63,7 @@
         </trim>
         where goolId=#{goolId}
     </update>
+    <delete id="deleteGool" parameterType="int">
+    delete from gool where goolId = #{goolId}
+  </delete>
 </mapper>

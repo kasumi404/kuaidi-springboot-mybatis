@@ -67,4 +67,13 @@ public class ManageController {
         return as.getManage(order);
 
     }
+
+    @RequestMapping(value="/deleteManage",method = RequestMethod.POST)
+    @ResponseBody
+    public Map getManage(@RequestParam(value="id",required=true) int id){//
+        Manage order = new Manage();
+        order.setId(id);
+        return as.deleteManage(order);
+
+    }
 }

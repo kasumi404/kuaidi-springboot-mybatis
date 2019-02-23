@@ -135,4 +135,28 @@ public class ManageService {
         }
         return map;
     }
+    //获得所有/
+    public Map deleteManage(Manage order){
+        Map<String, Object> map = new HashMap<>();
+        try {
+            sqlSession = SqlSessionFactoryUtil.openSession();
+            ManageMapper manageMapper = sqlSession.getMapper(ManageMapper.class);
+            int manages = manageMapper.deleteManage(order.getId());
+            map.put("manages",manages);
+            map.put("message","成功");
+            map.put("result",200);
+            sqlSession.commit();
+
+        } catch (Exception e) {
+            System.out.println("error:"+e);
+            map.put("message",e.toString());
+            map.put("result",500);
+            sqlSession.rollback();
+        }finally{
+            if(sqlSession != null){
+                sqlSession.close();
+            }
+        }
+        return map;
+    }
 }

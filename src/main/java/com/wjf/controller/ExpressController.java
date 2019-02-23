@@ -120,4 +120,12 @@ public class ExpressController {
         return es.updateExpress(express,gool);
 
     }
+    @RequestMapping(value="/deleteExpress",method = RequestMethod.POST)
+    @ResponseBody
+    public Map getManage(@RequestParam(value="id",required=true) int id){//
+        Express order = new Express();
+        order.setExpressId(id);
+        return es.deleteExpress(order);
+
+    }
 }

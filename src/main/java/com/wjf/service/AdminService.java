@@ -8,6 +8,7 @@ import com.wjf.po.Express;
 import com.wjf.utils.SqlSessionFactoryUtil;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +109,38 @@ public class AdminService {
         try {
             sqlSession = SqlSessionFactoryUtil.openSession();
             AdminInfoMapper adminInfoMapper = sqlSession.getMapper(AdminInfoMapper.class);
-            adminInfoMapper.updateAdminInfo(order2);
-            map.put("message","成功");
-            map.put("result",200);
-            sqlSession.commit();
+            AdminMapper adminMapper = sqlSession.getMapper(AdminMapper.class);
+
+            if(adminInfoMapper.getAdminInfo(order2).get(0).getAdminCell().equals("")){
+                AdminInfo order3 = new AdminInfo();
+                order3.setAdminCell(order2.getAdminCell());
+                List<AdminInfo> order3s = adminInfoMapper.getAdminInfo(order3);
+                if(order3s.size()>0){
+                    Admin admin = new Admin();
+                    admin.setId(order3s.get(0).getAdminId());
+                    if(adminMapper.getAdmin(admin)==null) {
+                        adminInfoMapper.deleteAdminInfo(order.getId());
+                        order2.setAdminId(order3s.get(0).getAdminId());
+                        adminInfoMapper.updateAdminInfo(order2);
+                        map.put("message","成功");
+                        map.put("result",200);
+                        sqlSession.commit();
+                    }else {
+                        map.put("message","此电话号已被注册");
+                        map.put("result",500);
+                    }
+                }else {
+                    adminInfoMapper.updateAdminInfo(order2);
+                    map.put("message","成功");
+                    map.put("result",200);
+                    sqlSession.commit();
+                }
+            }else {
+                adminInfoMapper.updateAdminInfo(order2);
+                map.put("message","成功");
+                map.put("result",200);
+                sqlSession.commit();
+            }
 
         } catch (Exception e) {
             System.out.println("error:"+e);
@@ -173,6 +202,29 @@ public class AdminService {
             map.put("adminInfos",adminInfos);
             map.put("result",200);
             map.put("message","成功");
+            sqlSession.commit();
+
+        } catch (Exception e) {
+            System.out.println("error:"+e);
+            map.put("message",e.toString());
+            map.put("result",500);
+            sqlSession.rollback();
+        }finally{
+            if(sqlSession != null){
+                sqlSession.close();
+            }
+        }
+        return map;
+    }
+    public Map deleteAdmin(AdminInfo order){
+        Map<String, Object> map = new HashMap<>();
+        try {
+            sqlSession = SqlSessionFactoryUtil.openSession();
+            AdminMapper manageMapper = sqlSession.getMapper(AdminMapper.class);
+            int manages = manageMapper.deleteAdmin(order.getAdminId());
+            map.put("manages",manages);
+            map.put("message","成功");
+            map.put("result",200);
             sqlSession.commit();
 
         } catch (Exception e) {

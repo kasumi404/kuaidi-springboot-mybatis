@@ -95,4 +95,27 @@ public class GoolService {
         }
         return map;
     }
+    public Map deleteGool(Gool order){
+        Map<String, Object> map = new HashMap<>();
+        try {
+            sqlSession = SqlSessionFactoryUtil.openSession();
+            GoolMapper manageMapper = sqlSession.getMapper(GoolMapper.class);
+            int manages = manageMapper.deleteGool(order.getGoolId());
+            map.put("manages",manages);
+            map.put("message","成功");
+            map.put("result",200);
+            sqlSession.commit();
+
+        } catch (Exception e) {
+            System.out.println("error:"+e);
+            map.put("message",e.toString());
+            map.put("result",500);
+            sqlSession.rollback();
+        }finally{
+            if(sqlSession != null){
+                sqlSession.close();
+            }
+        }
+        return map;
+    }
 }

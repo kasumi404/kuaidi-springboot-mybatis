@@ -46,4 +46,12 @@ public class ComplaintController {
         return gs.insertComplaint(order);
 
     }
+    @RequestMapping(value="/deleteComplaint",method = RequestMethod.POST)
+    @ResponseBody
+    public Map getManage(@RequestParam(value="id",required=true) int id){//
+        Complaint order = new Complaint();
+        order.setComplaintId(id);
+        return gs.deleteComplaint(order);
+
+    }
 }

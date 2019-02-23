@@ -53,4 +53,12 @@ public class CourierController {
         return as.getCourier(order);
 
     }
+    @RequestMapping(value="/deleteCourier",method = RequestMethod.POST)
+    @ResponseBody
+    public Map getManage(@RequestParam(value="id",required=true) int id){//
+        Courier order = new Courier();
+        order.setCourierId(id);
+        return as.deleteCourier(order);
+
+    }
 }

@@ -92,4 +92,12 @@ public class AdminController {
         return as.getAdminInfo(order);
 
     }
+    @RequestMapping(value="/deleteAdmin",method = RequestMethod.POST)
+    @ResponseBody
+    public Map getManage(@RequestParam(value="id",required=true) int id){//
+        AdminInfo order = new AdminInfo();
+        order.setAdminId(id);
+        return as.deleteAdmin(order);
+
+    }
 }

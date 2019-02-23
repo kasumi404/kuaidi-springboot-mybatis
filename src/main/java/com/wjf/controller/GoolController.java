@@ -50,4 +50,12 @@ public class GoolController {
         return gs.updateGoolByexpressCode(order,express);
 
     }
+    @RequestMapping(value="/deleteGool",method = RequestMethod.POST)
+    @ResponseBody
+    public Map getManage(@RequestParam(value="id",required=true) int id){//
+        Gool order = new Gool();
+        order.setGoolId(id);
+        return gs.deleteGool(order);
+
+    }
 }

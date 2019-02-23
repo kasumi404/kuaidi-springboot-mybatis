@@ -9,4 +9,5 @@ public interface ExpressMapper {
     public Express getExpressByExpressCode(Express express);
     public void insertExpress(Express express);
     public void updateExpress(Express express);
+    public int deleteExpress(Integer id);
 }

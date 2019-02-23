@@ -209,4 +209,27 @@ public class ExpressService {
             return map;
         }
     }
+    public Map deleteExpress(Express order){
+        Map<String, Object> map = new HashMap<>();
+        try {
+            sqlSession = SqlSessionFactoryUtil.openSession();
+            ExpressMapper manageMapper = sqlSession.getMapper(ExpressMapper.class);
+            int manages = manageMapper.deleteExpress(order.getExpressId());
+            map.put("manages",manages);
+            map.put("message","成功");
+            map.put("result",200);
+            sqlSession.commit();
+
+        } catch (Exception e) {
+            System.out.println("error:"+e);
+            map.put("message",e.toString());
+            map.put("result",500);
+            sqlSession.rollback();
+        }finally{
+            if(sqlSession != null){
+                sqlSession.close();
+            }
+        }
+        return map;
+    }
 }
