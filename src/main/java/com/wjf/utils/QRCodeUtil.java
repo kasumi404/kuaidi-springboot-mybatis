@@ -31,7 +31,7 @@ public class QRCodeUtil {//二维码颜色
     private static final int WHITE = 0xFFFFFFFF;
 
     public static void main(String[] args) throws Exception {
-        zxingCodeCreate("1234", 300, 300, "E:/expressCode/1.jpg", "jpg");
+        zxingCodeCreate("1234", 300, 300, "C:/expressCode/1.jpg", "jpg");
 //    zxingCodeAnalyze("D:/qrcode.jpg");}
         /**
          * 生成二维码

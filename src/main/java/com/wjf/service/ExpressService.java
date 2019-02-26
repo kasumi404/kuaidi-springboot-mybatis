@@ -24,14 +24,21 @@ public class ExpressService {
             sqlSession = SqlSessionFactoryUtil.openSession();
             ExpressMapper expressMapper = sqlSession.getMapper(ExpressMapper.class);
             List<Express> expresses = expressMapper.getExpressByAdminId(order);
+            System.out.println(expresses);
 
             AdminInfoMapper adminInfoMapper = sqlSession.getMapper(AdminInfoMapper.class);
+            GoolMapper goolMapper = sqlSession.getMapper(GoolMapper.class);
             for (int i = 0;i< expresses.size();i++){
                 AdminInfo adminInfo = new AdminInfo();
+                Gool gool = new Gool();
                 adminInfo.setAdminId(expresses.get(i).getExpressFromId());
                 expresses.get(i).setExpressFromInfo(adminInfoMapper.getAdminInfo(adminInfo).get(0));
                 adminInfo.setAdminId(expresses.get(i).getExpressToId());
                 expresses.get(i).setExpressToInfo(adminInfoMapper.getAdminInfo(adminInfo).get(0));
+
+
+                gool.setGoolId(expresses.get(i).getGoolId());
+                expresses.get(i).setGool(goolMapper.getGool(gool).get(0));
             }
             map.put("express",expresses);
             map.put("result",200);
@@ -47,8 +54,8 @@ public class ExpressService {
             if(sqlSession != null){
                 sqlSession.close();
             }
+            return map;
         }
-        return map;
     }
 
     //App申请寄快递
@@ -69,20 +76,36 @@ public class ExpressService {
 
 
             String code = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+String.format("%03d", number);
-            QRCodeUtil.zxingCodeCreate(code, 300, 300, "E:/expressCode/"+code+".jpg", "jpg");
+            QRCodeUtil.zxingCodeCreate(code, 300, 300, "C:/expressCode/"+code+".jpg", "jpg");
 
             order.setExpressCode(code);
-            if (adminInfoMapper.getAdminInfo(order2) != null){
-                order.setExpressToId(adminInfoMapper.getAdminInfo(order2).get(0).getAdminId());
+            AdminInfo adminInfo = new AdminInfo();
+            adminInfo.setAdminCell(order2.getAdminCell());
+            if (adminInfoMapper.getAdminInfo(adminInfo).size() > 0){
+                order.setExpressToId(adminInfoMapper.getAdminInfo(adminInfo).get(0).getAdminId());
+                order2 = adminInfoMapper.getAdminInfo(adminInfo).get(0);
+                System.out.println("!!!");
+                System.out.println(order2);
             }else {
                 adminInfoMapper.insertAdminInfo(order2);
                 order.setExpressToId(order2.getAdminId());
+                System.out.println("???");
+                System.out.println(order2);
 
             }
 
+            System.out.println(order);
             ExpressMapper expressMapper = sqlSession.getMapper(ExpressMapper.class);
             expressMapper.insertExpress(order);
 
+            order2.setAdminGetno(order2.getAdminGetno()+1);
+            adminInfoMapper.updateAdminInfo(order2);
+
+            AdminInfo order4 = new AdminInfo();
+            order4.setAdminId(order.getExpressFromId());
+            order4 = adminInfoMapper.getAdminInfo(order4).get(0);
+            order4.setAdminSendno(order4.getAdminSendno()+1);
+            adminInfoMapper.updateAdminInfo(order2);
             map.put("result",200);
             map.put("message","成功");
             sqlSession.commit();
@@ -193,10 +216,18 @@ public class ExpressService {
             sqlSession = SqlSessionFactoryUtil.openSession();
             ExpressMapper expressMapper = sqlSession.getMapper(ExpressMapper.class);
             GoolMapper goolMapper = sqlSession.getMapper(GoolMapper.class);
+            AdminInfoMapper adminInfoMapper = sqlSession.getMapper(AdminInfoMapper.class);
             Express express = expressMapper.getExpressByExpressCode(order);
             Gool gool = new Gool();
             gool.setGoolId(express.getGoolId());
             express.setGool(goolMapper.getGool(gool).get(0));
+
+
+            AdminInfo adminInfo = new AdminInfo();
+            adminInfo.setAdminId(express.getExpressFromId());
+            express.setExpressFromInfo(adminInfoMapper.getAdminInfo(adminInfo).get(0));
+            adminInfo.setAdminId(express.getExpressToId());
+            express.setExpressToInfo(adminInfoMapper.getAdminInfo(adminInfo).get(0));
             map.put("express",express);
             map.put("result",200);
             map.put("message","成功");

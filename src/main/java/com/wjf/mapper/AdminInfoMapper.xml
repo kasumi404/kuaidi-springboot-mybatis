@@ -17,7 +17,7 @@
         <if test="adminPlace != null and adminPlace !=''">
             and adminPlace=#{adminPlace}
         </if>
-        <if test="pageIndex != null">
+        <if test="pageIndex != null and pageIndex !=0">
           limit ${(pageIndex-1)*pageSize},${pageSize}
         </if>
   </select>

@@ -29,8 +29,21 @@ public class AdminService {
                 AdminInfoMapper adminInfoMapper = sqlSession.getMapper(AdminInfoMapper.class);
                 adminInfo.setAdminId(admin.getId());
                 adminInfo = adminInfoMapper.getAdminInfo(adminInfo).get(0);
+                adminInfo.setUserName(admin.getUsername());
+                adminInfo.setPassword(admin.getPassword());
                 map.put("message","成功");
                 map.put("result",200);
+                if (adminInfo.getAdminId() != null){
+                    Express express = new Express();
+                    ExpressService es = new ExpressService();
+                    express.setExpressFromId(adminInfo.getAdminId());
+                    express.setExpressToId(adminInfo.getAdminId());
+                    express.setExpressType("全部");
+                    express.setFlag(1);
+                    map.put("expressSend",es.getExpressByAdminId(express));
+                    express.setFlag(2);
+                    map.put("expressTo",es.getExpressByAdminId(express));
+                }
             }else {
                 map.put("message","用户名或密码错误");
                 map.put("result",400);
@@ -49,16 +62,6 @@ public class AdminService {
             }
         }
 
-        if (adminInfo.getAdminId() != null){
-            Express express = new Express();
-            ExpressService es = new ExpressService();
-            express.setExpressId(adminInfo.getAdminId());
-            express.setExpressType("全部");
-            express.setFlag(1);
-            map.put("expressSend",es.getExpressByAdminId(express));
-            express.setFlag(2);
-            map.put("expressTo",es.getExpressByAdminId(express));
-        }
         return map;
     }
 
@@ -110,8 +113,9 @@ public class AdminService {
             sqlSession = SqlSessionFactoryUtil.openSession();
             AdminInfoMapper adminInfoMapper = sqlSession.getMapper(AdminInfoMapper.class);
             AdminMapper adminMapper = sqlSession.getMapper(AdminMapper.class);
-
-            if(adminInfoMapper.getAdminInfo(order2).get(0).getAdminCell().equals("")){
+            AdminInfo adminInfo = new AdminInfo();
+            adminInfo.setAdminId(order2.getAdminId());
+            if(adminInfoMapper.getAdminInfo(adminInfo).get(0).getAdminCell()==null){
                 AdminInfo order3 = new AdminInfo();
                 order3.setAdminCell(order2.getAdminCell());
                 List<AdminInfo> order3s = adminInfoMapper.getAdminInfo(order3);

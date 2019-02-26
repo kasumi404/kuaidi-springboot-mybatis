@@ -49,7 +49,7 @@ public class ExpressController {
         AdminInfo adminInfo = new AdminInfo();
         adminInfo.setAdminName(adminName);
         adminInfo.setAdminCell(adminCell);
-        adminInfo.setAdminPlace(expressPlace);
+        adminInfo.setAdminPlace(expressTo);
         adminInfo.setAdminRoot("0");
 
         Gool gool = new Gool();
